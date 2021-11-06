@@ -35,12 +35,27 @@
 # Y para agregar las demás características del usuario, utilizaremos User.
 # Ya con esto creamos los modelo de usuario de User.
 
+# Ahora crearemos el Tweet model. 
+# 1.	Primer atributo sera el tweet_id, del mismo tipo UUID del user id.
+# 2.	Tendremos un content, que sera el contenido del tweet, tipo str, y sera un Field de pydantic también
+# Sera obligatorio, 
+# tendra un max_length de 280 caracteres
+# un min len de 1 carácter
+# 3.	Un created_at, que sera la fecha de creación del tweet y esto sera de tipo datetime, ya no solo date, porque datetime sera el modulo que además nos muestre hora, minuto segundo, además este sera un Field que contenga los siguientes parámetros.
+# Aclaracion: Tendremos que importar, además de datetime, el modulo datetime, para que tengamos la hora, minuto y segundo en la que se creo el tweet.
+# created_at: datetime = Field(default=datetime.now())
+# 4.	Ahora ademas, con el mismo molde de created_at, tendremos un atributo Field llamado updated_at, para actualizar el Tweet. Sabemos que esto no se puede en twitter, pero esto es un twitter con estereoides
+# Ademas este tipo datetime, sera opcional, pues solo se utilizara para actualizar.
+# 5.	Falta un ultimo atributo que sera by: User, que como vemos es de tipo User, es decir hereda de la clase User, para decir quien en el modelo de tweet quien es el usuario de procedencia.
+# Sera un Field, obligatorio
+
+
 
 #IMPORTS
 
 #Python
 from uuid import UUID
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 #Pydantic
@@ -55,6 +70,8 @@ app = FastAPI()
 
 #MODELS
 
+#User Models
+
 class UserBase(BaseModel):
     user_id: UUID = Field(...)
     email: EmailStr = Field(...)
@@ -62,7 +79,8 @@ class UserBase(BaseModel):
 class UserLogin(UserBase):
     password: str = Field(
         ...,
-        min_length=8
+        min_length=8,
+        max_length=64
     )
 
 class User(UserBase):
@@ -78,8 +96,19 @@ class User(UserBase):
         max_length=50,
     )
     birth_date: Optional[date] = Field(default=None)
+
+#Tweet Model
+
 class Tweets(BaseModel):
-    pass
+    tweet_id: UUID = Field(...)
+    content: str = Field(
+        ...,
+        min_length=1,
+        max_length=280
+    )
+    created_at: datetime = Field (default=datetime.now())
+    update_at: Optional[datetime] = Field(default=None)
+    by: User = Field(...)
 
 # PATH OPERATIONS
 
