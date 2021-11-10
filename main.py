@@ -1,22 +1,5 @@
-#Path Operation Structure Users
+#Path Operation Structure Tweets
 
-# Ahora construiremos nuestros path operations. Empezaremos por los usuarios.
-
-# 1.	git checkout -b “path_operation_structure_users
-# 2.	La primera path operation es la de /signup.
-# Haremos el decorator, que sera una petición tipo .post, porque el cliente enviara la información de registro.
-# El path operation decorator va llevar todas las buenas practicas que hemos visto hasta ahora.
-# path=”/signup”
-# response_model=User #En response model heredaremos de User, pues necesitamos tanto lo que ya tenia User heredado de UserBase, como los atributos que agrega.
-# status_code=status. #Sera 201 CREATED. Recordemos que debemos importer status de fastapi.
-# summary=”Register a User”
-# tags=[“Users”]
-# 3.	Ahora haremos la path operation function que se llamara signup
-# Por el momento la dejaremos sin parámetros y le pondremos un pass, porque vamos a definir la estructura de las path operation solamente.
-# 4.	Copiaremos toda la estructura y la pegaremos para todas las path operations que tendremos de los usuarios y empezaremos a modificarlo según sus funcionalidades.
-# Recordemos que en los que no estemos solicitando llenar un Field al cliente, vamos a cambiar el tipo de petición a un .get. En los que toca borrar con el .delete. Y en los que hay que actualizar .put
-# En /users, el response model no sera precisamente un User. Pues como muestra todos los usuarios, necesitaremos que el JSON contenga todos los usuarios, necesitaremos algo de la librería typing que es la clase List, que nos permite definir que el tipo de una variable va ser una lista de cosas.
-# Por lo tanto el response model, es una lista de usuarios List[User].
 
 
 #IMPORTS
@@ -149,3 +132,52 @@ def update_specific_user():
 
 ## Tweets
 
+@app.get(
+    path="/",
+    response_model=List[Tweets],
+    status_code=status.HTTP_200_OK,
+    summary="Show All Tweets",
+    tags=["Tweets"]
+)
+def home():
+    return {"Twitter API": "Working"}
+
+@app.post(
+    path="/post",
+    response_model=Tweets,
+    status_code=status.HTTP_201_CREATED,
+    summary="Create a Tweet",
+    tags=["Tweets"]
+)
+def create_tweet():
+    pass
+
+@app.get(
+    path="/tweets/{tweet_id}",
+    response_model=Tweets,
+    status_code=status.HTTP_200_OK,
+    summary="Show specific Tweet",
+    tags=["Tweets"]
+)
+def show_specific_tweet():
+    pass
+
+@app.delete(
+    path="/tweets/{tweet_id}/delete",
+    response_model=Tweets,
+    status_code=status.HTTP_200_OK,
+    summary="Delete a Tweet",
+    tags=["Tweets"]
+)
+def delete_tweet():
+    pass
+
+@app.put(
+    path="/tweets/{tweet_id}/update",
+    response_model=Tweets,
+    status_code=status.HTTP_200_OK,
+    summary="Update a Tweet",
+    tags=["Tweets"]
+)
+def update_tweet():
+    pass
