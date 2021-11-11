@@ -115,9 +115,9 @@ class Tweets(BaseModel):
 
 # PATH OPERATIONS
 
-@app.get(path="/")
-def home():
-    return {"Twitter API": "Working"}
+# @app.get(path="/")
+# def home():
+#     return {"Twitter API": "Working"}
 
 
 ## Users
@@ -251,7 +251,28 @@ def update_specific_user():
     tags=["Tweets"]
 )
 def home():
-    return {"Twitter API": "Working"}
+    """
+    This path opepration shows all tweets in the app
+
+    Parameters:
+        
+        -
+    
+    Returns a json list with all tweets in the app, with the following keys
+         
+        - tweet_id: UUID 
+
+        - content: str
+
+        - created_at: datetime
+
+        - update_at: Optional[datetime]
+        
+        - by: User
+    """
+    with open("tweets.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        return results
 
 @app.post(
     path="/post",
