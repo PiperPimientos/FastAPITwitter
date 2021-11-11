@@ -1,48 +1,10 @@
-#Path Operation Create Tweet
+#Path Operation Home
 
-
-# Crearemos u nuevo branch llamado “tweet_post” porque vamos a trabajar en la path operation para crear un nuevo tweet.
-# 1.	Vamos a copiar el contenido de nuestra path operation function de signup y lo vamos a pegar en nuestra funcion de post a tweet
-# Modificaremos todo
-# Empezando por el docstring y el parámetro de la funcion que sera tweet de tipo Tweet y sera igual a un Body parameter obligatorio
-# 2.	Ahora trabajaremos con la lógica
-# cambiaremos el .json por el tweets.json
-# cambiaremos todos los users por tweet y en los tweet_dict los cambiaremos por los atributos del model Tweets
-# 3.	Ahora nos toca castear a updated_at, pero si es que existe.
-# Para ello utilizaremos la condicional
-# Si existe updated_at, en updated_at vamos a castear su contenido a string
-# if tweet_dict[“updated_at”]:
-#          tweet_dict[“updated_at”] = str(tweet_dict[“updated_at”])
-# 4.	Si nos vamos a la documentación interactiva y nos vamos a Create a Tweet
-# Si le damos try it out y le cambiamos el contenido para el ejemplo
- 
-# Tenemos un error 500.
-# Vamos al traceback y nos dice que tenemos un key error
-# Vamos a remover el condicional en update_at
-# Ahora si ejecutamos de nuevo, tenemos otro error 5000 que nos dice
-# Objecto of type UUID is not JSON serializable. Es decir que tenemos un archivo tipo UUID que tiene algo que no puede pertenecer a un .json
-# Si nos fijamos en el código, veremos que todo parece bien casteado.
-# Si nos vamos a la documentación interactiva y vemos la estructura del reques body veremos que tendremos un tweet_id convertido a string que si se podría guardar en un JSON. 
-# {
-#   "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-#   "content": "Primer tweet de la historia",
-#   "created_at": "2021-11-11T10:58:40.613605",
-#   "update_at": "2021-11-11T15:59:54.669Z",
-#   "by": {
-#     "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-#     "email": "felipe@example.com",
-#     "first_name": "Felipe",
-#     "last_name": "Restrepo",
-#     "birth_date": "1997-11-11"
-#   }
-# }
-# Sin embargo, es mas que lógico, hay un tipo UUID que no estamos serializando, este es el user_id
-# Para castearlo a un string tenemos que acceder al tweet_dict y accedemos a la llave by, que se corresponde al usuario, y si accedemos a la llave by del diccionario, en otra lista podemos acceder a las llaves internas de ese diccionario, por lo que accedemos a user_id,
-# De ahí solo queda castearlo convirtiendo lo mismo a un str
-# 1.	Accedemos a tweet_dict[“by”][“user_id”] = str(tweet_dict[“by”][“user_id”])
-# 2.	Haremos lo mismo con el birth_date que también tendremos que castearlo
-# 3.	Si ahora nos vamos a la documentación interactiva y ejecutamos, veremos que tenemos un 201.
-
+# Creamos nueva Branch llamada “home”
+# 1.	Vamos a copiar la path operation para show all users y la pegaremos en el home de nuestra aplicación,
+# Cambiaremos el docstring
+# dejaremos el path operation function tal cual.
+# Si vamos a la documentación interactiva y ejecutamos, tendremos todos nuestros tweets en un JSON.
 
 
 
