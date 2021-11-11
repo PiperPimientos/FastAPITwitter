@@ -1,10 +1,4 @@
-#Path Operation Home
-
-# Creamos nueva Branch llamada “home”
-# 1.	Vamos a copiar la path operation para show all users y la pegaremos en el home de nuestra aplicación,
-# Cambiaremos el docstring
-# dejaremos el path operation function tal cual.
-# Si vamos a la documentación interactiva y ejecutamos, tendremos todos nuestros tweets en un JSON.
+#Path Operation Login
 
 
 
@@ -22,7 +16,7 @@ from pydantic import EmailStr
 from pydantic import Field
 
 #FastAPI
-from fastapi import FastAPI, status, Body
+from fastapi import FastAPI, status, Body, Form
 
 app = FastAPI()
 
@@ -34,12 +28,19 @@ class UserBase(BaseModel):
     user_id: UUID = Field(...)
     email: EmailStr = Field(...)
 
-class UserLogin(UserBase):
+class PasswordMixin(BaseModel):
     password: str = Field(
         ...,
         min_length=8,
         max_length=64
     )
+    
+
+class UserLogin(PasswordMixin, UserBase):
+    pass
+
+class UserLoginOut(UserBase):
+    message: str = Field(default="Login Succesfully!")
 
 class User(UserBase):
 
@@ -128,19 +129,43 @@ def signup(
         f.write(json.dumps(results))
         return user
 
-
-
-
-
 @app.post(
     path="/login",
-    response_model=User,
+    response_model=UserLoginOut,
     status_code=status.HTTP_200_OK,
     summary="Login a User",
     tags=["Users"]
 )
-def login():
-    pass
+def login(email: EmailStr = Form(...), password: str = Form(...)):
+    """
+    Login
+
+    This path operation login a user in the app with a form
+
+    Parameters:
+
+        - Request body parameter
+
+            - Form: UserLogin
+    
+    Return a json with UserLoginOut
+
+        - user_id: UUID
+
+        - email: EmailStr
+
+        - message: str
+
+    """    
+    with open("users.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        login_dict = login.dict()
+        login_dict["email"] = str(login_dict["email"])
+        login_dict["password"] = str(login_dict["password"])
+        if login_dict["email"] == email and login_dict["password"] == password:
+            return UserLoginOut
+        return results
+
 
 @app.get(
     path="/users",
@@ -151,7 +176,7 @@ def login():
 )
 def show_all_users():
     """
-    This path opepration shows all users in the app
+    This path operation shows all users in the app
 
     Parameters:
         
