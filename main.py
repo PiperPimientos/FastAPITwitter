@@ -1,17 +1,11 @@
-#Path Operation Structure Tweets
-
-# Ahora haremos nuestros tweet path operations.
-# 1.	git checkout -b “path_operation_structure_tweets”
-# 2.	Ahora, el path operation de home, es el que nos trae a ver todos los tweets, asi que lo pondremos dentro de nuestros path operations de tweets.
-# Le agregaremos todos los parámetros del .get
-# Por ejemplo, algo de especial detalle es que como nos va mostrar todos los tweets, lo correcto es que lo incluyamos el modelo del response model en una lista como lo hicimos con el /users
-# 3.	Luego tendremos los demás path operations de tweets que ya habíamos hecho en el esquema del grafico de todos los endpoints de nuestra aplicación
+#Path Operation Signup de User
 
 
 
 #IMPORTS
 
 #Python
+import json
 from uuid import UUID
 from datetime import date, datetime
 from typing import Optional, List
@@ -22,7 +16,7 @@ from pydantic import EmailStr
 from pydantic import Field
 
 #FastAPI
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, Body
 
 app = FastAPI()
 
@@ -55,6 +49,13 @@ class User(UserBase):
     )
     birth_date: Optional[date] = Field(default=None)
 
+class UserRegister(User):
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=64
+    )
+
 #Tweet Model
 
 class Tweets(BaseModel):
@@ -84,8 +85,46 @@ def home():
     summary="Register a User",
     tags=["Users"]
 )
-def signup():
-    pass
+def signup(
+    user: UserRegister = Body(...),
+):
+    """
+    Signup
+
+    This path operation register a user in the app
+
+    Parameters:
+
+        - Request body parameter
+
+            - user: UserRegister
+    
+    Return a json with the basic user information
+
+        - user_id: UUID
+
+        - email: EmailStr
+
+        - first_name: str
+
+        - last_name: str
+
+        - birth_date: date
+
+    """
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        user_dict = user.dict()
+        user_dict["user_id"] = str(user_dict["user_id"])
+        user_dict["birth_date"] = str(user_dict["birth_date"])
+        results.append(user_dict)
+        f.seek(0)
+        f.write(json.dumps(results))
+        return user
+
+
+
+
 
 @app.post(
     path="/login",
