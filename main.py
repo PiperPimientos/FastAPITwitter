@@ -1,5 +1,12 @@
 #Path Operation Structure Tweets
 
+# Ahora haremos nuestros tweet path operations.
+# 1.	git checkout -b “path_operation_structure_tweets”
+# 2.	Ahora, el path operation de home, es el que nos trae a ver todos los tweets, asi que lo pondremos dentro de nuestros path operations de tweets.
+# Le agregaremos todos los parámetros del .get
+# Por ejemplo, algo de especial detalle es que como nos va mostrar todos los tweets, lo correcto es que lo incluyamos el modelo del response model en una lista como lo hicimos con el /users
+# 3.	Luego tendremos los demás path operations de tweets que ya habíamos hecho en el esquema del grafico de todos los endpoints de nuestra aplicación
+
 
 
 #IMPORTS
