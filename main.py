@@ -1,4 +1,4 @@
-#Path Operation Login
+#Path Operation Show Specific User
 
 
 
@@ -16,7 +16,7 @@ from pydantic import EmailStr
 from pydantic import Field
 
 #FastAPI
-from fastapi import FastAPI, status, Body, Form
+from fastapi import FastAPI, status, Body, Form, Path, HTTPException
 
 app = FastAPI()
 
@@ -205,8 +205,44 @@ def show_all_users():
     summary="Show a specific user information",
     tags=["Users"]
 )
-def show_specific_user():
-    pass
+def show_specific_user(
+            user_id: str = Path(
+                ..., 
+                gt=0,
+                title="Person",
+                description="Showing id person"
+                ), 
+):
+    """
+    This path operation shows a specific user information in the app
+
+    Parameters:
+        
+        -
+    
+    Returns a json list with specific user in the app, with the following keys
+         
+        - user_id: UUID
+
+        - email: EmailStr
+
+        - first_name: str
+
+        - last_name: str
+
+        - birth_date: date
+    """   
+    with open("users.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        user_dict = user_id.dict()
+        user_dict["user_id"] = str(user_dict["user_id"])
+        if user_id not in user_dict:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="This person doesnt exist"
+            )
+        return {results: "It exists!"}
+        return results
 
 @app.delete(
     path="/users/{user_id}/delete",
